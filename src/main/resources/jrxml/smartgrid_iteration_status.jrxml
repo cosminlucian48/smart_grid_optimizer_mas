@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.3.1.final using JasperReports Library version 6.3.1  -->
+<!-- 2017-02-23T19:34:21 -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="mashes_iteration_status" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="fcc2bced-72c0-40d9-a0d0-e06f9fb936a6">
+	<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="iterations" uuid="80e8ddd3-38f5-4634-b72e-a6cbfd110f08">
+		<property name="com.jaspersoft.studio.data.defaultdataadapter" value="One Empty Record"/>
+		<queryString>
+			<![CDATA[]]>
+		</queryString>
+		<field name="powerGeneratedValue" class="java.lang.Double"/>
+		<field name="loadConsumptionValue" class="java.lang.Double"/>
+		<field name="surplusValue" class="java.lang.Double"/>
+		<field name="batteryLevelValue" class="java.lang.Double"/>
+		<field name="powerSoldValue" class="java.lang.Double"/>
+		<field name="powerBoughtValue" class="java.lang.Double"/>
+		<field name="adjustLoadValue" class="java.lang.Double"/>
+	</subDataset>
+	<parameter name="IterationStatusList" class="net.sf.jasperreports.engine.data.JRBeanCollectionDataSource"/>
+	<parameter name="loadFactor" class="java.lang.Double"/>
+	<parameter name="genFactor" class="java.lang.Double"/>
+	<parameter name="cellMaxBatLevel" class="java.lang.Double"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="94" splitType="Stretch">
+			<staticText>
+				<reportElement x="40" y="10" width="465" height="40" uuid="bac844f8-2f80-4e83-a36d-c3d4089c6542"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="16"/>
+				</textElement>
+				<text><![CDATA[Mashes Status]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="40" y="50" width="70" height="30" uuid="9c80c404-b6c1-4d9c-b5f9-e127f0d9b190"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Load Factor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="110" y="50" width="70" height="30" uuid="060b3648-f4d6-4fd6-b992-059e8c82e71f"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{loadFactor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="180" y="50" width="100" height="30" uuid="a156e9d1-f6ba-4e13-bddb-70e156949700"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Generation Factor:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="280" y="50" width="70" height="30" uuid="b9a14308-983f-4006-a070-1ac34eeeb4a8"/>
+				<textElement textAlignment="Left" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{genFactor}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="350" y="50" width="100" height="30" uuid="2c0f550b-d4b9-45e0-9043-ebcd891c583f"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<text><![CDATA[Cell Max Bat Level:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="450" y="50" width="54" height="30" uuid="ca913659-5469-41ad-a002-b10d5df0ae67"/>
+				<textElement verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$P{cellMaxBatLevel}]]></textFieldExpression>
+			</textField>
+		</band>
+	</title>
+	<detail>
+		<band height="225" splitType="Stretch">
+			<componentElement>
+				<reportElement mode="Transparent" x="0" y="0" width="550" height="225" uuid="b9ac4e68-c63b-4bba-94eb-7f1dd52f28ed">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table_TD"/>
+					<property name="net.sf.jasperreports.export.headertoolbar.table.name" value=""/>
+					<property name="com.jaspersoft.studio.components.autoresize.proportional" value="true"/>
+					<property name="com.jaspersoft.studio.components.autoresize.next" value="true"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" whenNoDataType="AllSectionsNoDetail">
+					<datasetRun subDataset="iterations" uuid="685882fc-b101-44d9-804f-be33d0afcd51">
+						<dataSourceExpression><![CDATA[$P{IterationStatusList}]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="85" uuid="b338b5b4-c1c6-44aa-94ea-f16177a50369">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_TH" x="0" y="0" width="85" height="30" uuid="39b72856-a2b1-4eb1-b3dd-162e1aaae298"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Power Generated]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="85" height="30" uuid="af129799-99ed-467c-a480-58d6a74b4551"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{powerGeneratedValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="80" uuid="e5735109-0dbd-4412-88b4-0078b5e156c4">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_TH" x="0" y="0" width="80" height="30" uuid="73f02d47-87dd-4144-82e3-eccf5b5ff814"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle" markup="none">
+									<font size="11"/>
+								</textElement>
+								<text><![CDATA[Power Loaded]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="80" height="30" uuid="2def6d5c-b203-464a-966b-775d15199382"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{loadConsumptionValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="77" uuid="8aae1082-d300-4f76-98ba-920b2f748eb5">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_TH" x="0" y="0" width="77" height="30" uuid="2a1af838-8711-4827-936b-8fb6c741ea53"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Surplus]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="77" height="30" uuid="57170f7d-351c-4f15-bb40-dd86054bcafd"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{surplusValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="71" uuid="8ff367b1-daad-4506-981d-fef3cd356f69">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_TH" x="0" y="0" width="71" height="30" uuid="83b93174-dc10-46f2-874c-e2480adb32e9"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Power Shell]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="71" height="30" uuid="f852e941-c99f-4379-87d2-5cbad51f7400"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{powerSoldValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="78" uuid="2c507e6e-4304-4398-8da7-8ac74b4a0351">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column5"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_TH" x="0" y="0" width="78" height="30" uuid="a096bafe-1d89-40a5-b0d3-f94659a8700c"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Power Bought]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="78" height="30" uuid="99a3184c-8e25-4aef-a54b-e8a051a49f2f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{powerBoughtValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="73" uuid="d5393d81-ac9b-4cbb-96b8-78a49150681e">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column6"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement style="Table_TH" x="0" y="0" width="73" height="30" uuid="d58d5548-0816-4264-b7ea-91ae317b1138"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Total Battery]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="73" height="30" uuid="e8830542-8997-4f39-a959-465172286649"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{batteryLevelValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+					<jr:column width="86" uuid="b0d5f50e-3600-460d-a1e3-94738e62864c">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column7"/>
+						<jr:tableHeader style="Table_TH" height="30" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="86" height="30" uuid="19e7a35d-98c0-4680-a876-11813ba0761a"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<text><![CDATA[Adjust Load]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:detailCell style="Table_TD" height="30">
+							<textField>
+								<reportElement x="0" y="0" width="86" height="30" uuid="09d590c9-85d4-4e2c-9286-376268e49c7f"/>
+								<textElement textAlignment="Center" verticalAlignment="Middle"/>
+								<textFieldExpression><![CDATA[new DecimalFormat("###.##").format($F{adjustLoadValue})]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+</jasperReport>
