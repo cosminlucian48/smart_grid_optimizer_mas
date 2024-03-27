@@ -32,6 +32,8 @@ In the context of SmartGrid Optimizer, agents represent various entities within 
 
 * **Resilience and Fault Tolerance:** MAS can exhibit robustness and fault tolerance due to their decentralized nature. Failure or malfunction of individual agents does not necessarily disrupt the entire system, as other agents can compensate or take over responsibilities, ensuring continued operation.
 
+## 🧩 Unraveling the Agents
+
 ### BatteryAgent
 
 The BatteryAgent simulates the behavior of a battery within the energy management system. It is responsible for storing and retrieving energy based on system requirements. When it receives a "StoreInBattery" message, indicating an excess of energy to be stored, it increases its battery level accordingly. Conversely, when it receives a "RetrieveDemand" message, indicating a demand for energy to be met, it decreases its battery level accordingly. Additionally, the BatteryAgent periodically notifies subscribers of its current battery level to provide real-time updates on its status within the system.
