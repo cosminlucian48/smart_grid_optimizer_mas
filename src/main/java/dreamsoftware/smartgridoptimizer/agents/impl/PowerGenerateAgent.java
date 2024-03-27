@@ -111,14 +111,14 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 	}
 
 	@Override
-	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfos,
-			List<JmxAttributeMethodInfo> attributeMethodInfos, List<JmxOperationInfo> operationInfos) {
+	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfoList,
+								 List<JmxAttributeMethodInfo> attributeMethodInfoList, List<JmxOperationInfo> operationInfoList) {
 		
 		resourceInfo.setJmxDomainName(AGENT_NAME);
 		resourceInfo.setJmxBeanName(this.getAID().getLocalName());
 		resourceInfo.setJmxDescription(AGENT_DESCRIPTION);
 		
-		attributeFieldInfos.add(new JmxAttributeFieldInfo("GEN_FACTOR", true, true, "Generation Factor for all Power Generate Agents"));
+		attributeFieldInfoList.add(new JmxAttributeFieldInfo("GEN_FACTOR", true, true, "Generation Factor for all Power Generate Agents"));
 	}
 	
 	/**

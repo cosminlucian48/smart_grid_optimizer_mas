@@ -129,14 +129,14 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
 	}
 
 	@Override
-	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfos,
-			List<JmxAttributeMethodInfo> attributeMethodInfos, List<JmxOperationInfo> operationInfos) {
+	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfoList,
+								 List<JmxAttributeMethodInfo> attributeMethodInfoList, List<JmxOperationInfo> operationInfoList) {
 	
 		resourceInfo.setJmxDomainName(AGENT_NAME);
 		resourceInfo.setJmxBeanName(this.getAID().getLocalName());
 		resourceInfo.setJmxDescription(AGENT_DESCRIPTION);
 		
-		attributeFieldInfos.add(new JmxAttributeFieldInfo("LOAD_FACTOR", true, true, "Load Factor for all Power load Agents"));
+		attributeFieldInfoList.add(new JmxAttributeFieldInfo("LOAD_FACTOR", true, true, "Load Factor for all Power load Agents"));
 	}
 	
 	/**

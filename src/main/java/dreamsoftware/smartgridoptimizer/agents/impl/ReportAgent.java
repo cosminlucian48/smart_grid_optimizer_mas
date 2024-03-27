@@ -98,28 +98,28 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 	}
 	
 	@Override
-	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfos,
-			List<JmxAttributeMethodInfo> attributeMethodInfos, List<JmxOperationInfo> operationInfos) {
+	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfoList,
+								 List<JmxAttributeMethodInfo> attributeMethodInfoList, List<JmxOperationInfo> operationInfoList) {
 		
 		resourceInfo.setJmxDomainName(AGENT_NAME);
 		resourceInfo.setJmxBeanName(this.getAID().getLocalName());
 		resourceInfo.setJmxDescription(AGENT_DESCRIPTION);
 		
-		attributeFieldInfos.add(new JmxAttributeFieldInfo("GENERATE_INFORM_INTERVAL", true, true, "Interval for generate report"));
+		attributeFieldInfoList.add(new JmxAttributeFieldInfo("GENERATE_INFORM_INTERVAL", true, true, "Interval for generate report"));
 		
 		// Report's Folder
-		attributeFieldInfos.add(new JmxAttributeFieldInfo("reportRootFolder", true, false, "Folder for reports"));
+		attributeFieldInfoList.add(new JmxAttributeFieldInfo("reportRootFolder", true, false, "Folder for reports"));
 		
 		// Report's format
-		attributeMethodInfos.add(new JmxAttributeMethodInfo("getReportFormatName", "Format for Reports"));
+		attributeMethodInfoList.add(new JmxAttributeMethodInfo("getReportFormatName", "Format for Reports"));
 		
 		// Jmx Operation to change the report's folder.
-		operationInfos.add(new JmxOperationInfo("changeReportsFolder", 
+		operationInfoList.add(new JmxOperationInfo("changeReportsFolder",
 				new String [] { "folder" }, new String [] { "New folder" }, JmxOperationInfo.OperationAction.ACTION,
                 "Change report directory"));
 		
 		// Jmx Operation to change the report's format.
-		operationInfos.add(new JmxOperationInfo("changeReportFormat", 
+		operationInfoList.add(new JmxOperationInfo("changeReportFormat",
 				new String [] { "format" }, new String [] { "New Format" }, JmxOperationInfo.OperationAction.ACTION,
 		        "Change report's format"));
 		

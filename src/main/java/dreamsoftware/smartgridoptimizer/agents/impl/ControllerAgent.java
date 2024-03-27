@@ -1,5 +1,6 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -47,8 +48,9 @@ import dreamsoftware.smartgridoptimizer.ontology.visitor.IControllerVisitor;
 
 public class ControllerAgent extends NotifierAgent implements IControllerVisitor {
 	
-	private Logger logger = LoggerFactory.getLogger(ControllerAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(ControllerAgent.class);
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	public final static String AGENT_NAME = "CONTROLLER_AGENT";
@@ -56,7 +58,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 	
 	private final static Integer CHECK_POWER_INTERVAL = 1000;
 	
-	private Map<AID, Double> batteryLevels = new HashMap<AID, Double>();
+	private final Map<AID, Double> batteryLevels = new HashMap<>();
 	
 	private DFAgentDescription[] loadEnergyAgents = {};
 	private DFAgentDescription[] generatedEnergyAgents = {};
@@ -81,6 +83,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 		
 		addBehaviour(new SubscriptionInitiator(this, DFService.createSubscriptionMessage(this, getDefaultDF(), reportLoadEnergyDescription, null)) {
 			
+			@Serial
 			private static final long serialVersionUID = 1L;
 		
 
@@ -95,7 +98,6 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 						subscribeToServices(results);
 						loadEnergyAgents = (DFAgentDescription[]) ArrayUtils.addAll(loadEnergyAgents, results);
 					}
-					
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
@@ -118,6 +120,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 
 		addBehaviour(new SubscriptionInitiator(this, DFService.createSubscriptionMessage(this, getDefaultDF(), reportGeneratedEnergyDescription, null)) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -155,6 +158,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 		
 		addBehaviour(new SubscriptionInitiator(this, DFService.createSubscriptionMessage(this, getDefaultDF(), batteriesAgentsDescription, null)) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 		
 			@Override
@@ -181,7 +185,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
    
 	private void subscribeToServices(DFAgentDescription[] agents) {
 		for (DFAgentDescription agentDes : agents) {
-			// subscribe to each agents.
+			// subscribe to each agent.
 			ACLMessage messageSub = new ACLMessage(ACLMessage.SUBSCRIBE);
 			messageSub.setProtocol(FIPANames.InteractionProtocol.FIPA_SUBSCRIBE);
 			messageSub.addReceiver(agentDes.getName());
@@ -195,8 +199,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 		lookupLoadEnergyAgents();
 		lookupGeneratedEnergyAgents();
 		lookupBatteryAgents();
-		
-		
+
 		this.addBehaviour(new CheckPower(this, CHECK_POWER_INTERVAL));
 	}
 
@@ -214,7 +217,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 	
 	public void visit(NotifierBatteryLevel notifierBatteryLevel) {
 		logger.debug("Battery Level value " + notifierBatteryLevel.getBatteryLevel().getBatteryLevelValue());
-		//batteryLevels.put(notifierBatteryLevel.getAid(), notifierBatteryLevel.getBatteryLevel().getBatteryLevelValue());
+		batteryLevels.put(notifierBatteryLevel.getAid(), notifierBatteryLevel.getBatteryLevel().getBatteryLevelValue());
 	}
 	
 	@Override
@@ -226,8 +229,8 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 	}
 	
 	@Override
-	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfos,
-			List<JmxAttributeMethodInfo> attributeMethodInfos, List<JmxOperationInfo> operationInfos) {
+	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfoList,
+								 List<JmxAttributeMethodInfo> attributeMethodInfoList, List<JmxOperationInfo> operationInfoList) {
 		
 		resourceInfo.setJmxDomainName(AGENT_NAME);
 		resourceInfo.setJmxBeanName(this.getAID().getLocalName());
