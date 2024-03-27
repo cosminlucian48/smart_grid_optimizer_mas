@@ -36,8 +36,11 @@ import dreamsoftware.smartgridoptimizer.ontology.predicates.SellingPower;
 import dreamsoftware.smartgridoptimizer.ontology.predicates.StoreInBattery;
 import dreamsoftware.smartgridoptimizer.ontology.predicates.UpdateLoad;
 
+import java.io.Serial;
+
 public final class SmartGridOntology extends Ontology implements ISmartGridVocabulary {
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	public static final String ONTOLOGY_NAME = "SmartGrid Ontology";
 	
@@ -193,13 +196,13 @@ public final class SmartGridOntology extends Ontology implements ISmartGridVocab
 			
 			//Iteration Status Predicate Schema
 			PredicateSchema isps = new PredicateSchema(ITERATION_STATUS);
-			isps.add(POWER_GENERATED_VALUE, (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
-			isps.add(LOAD_CONSUMPTION_VALUE, (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
-			isps.add(SURPLUS_VALUE, (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
-			isps.add(BATTERY_LEVEL_VALUE, (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
-			isps.add(POWER_SOLD_VALUE, (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
-			isps.add(POWER_BOUGHT_VALUE,  (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
-			isps.add(ADJUST_LOAD_VALUE, (PrimitiveSchema) getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(POWER_GENERATED_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(LOAD_CONSUMPTION_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(SURPLUS_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(BATTERY_LEVEL_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(POWER_SOLD_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(POWER_BOUGHT_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
+			isps.add(ADJUST_LOAD_VALUE, getSchema(BasicOntology.FLOAT), ObjectSchema.MANDATORY);
 			
 			add(isps, IterationStatus.class);
 			
@@ -222,11 +225,7 @@ public final class SmartGridOntology extends Ontology implements ISmartGridVocab
 			AgentActionSchema cpcms = new AgentActionSchema(CHANGE_POWER_CONSUMPTION_MEASURES);
 			cpcms.add(POWER_CONSUMPTION_MEASURES, lccs, ObjectSchema.UNLIMITED);
 			add(cpcms, ChangePowerConsumptionMeasures.class);
-			
-		
-			
 		} catch (OntologyException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 	}
@@ -236,5 +235,4 @@ public final class SmartGridOntology extends Ontology implements ISmartGridVocab
 			instance = new SmartGridOntology();
 	     return instance;
 	 }
-
 }

@@ -6,15 +6,31 @@ import dreamsoftware.smartgridoptimizer.ontology.concepts.BatteryLevel;
 import dreamsoftware.smartgridoptimizer.ontology.visitable.IVisitable;
 import dreamsoftware.smartgridoptimizer.ontology.visitor.IControllerVisitor;
 
+import java.io.Serial;
+
+/**
+ * The NotifierBatteryLevel class represents a predicate used to notify about battery levels.
+ * It implements the Predicate and IVisitable<IControllerVisitor> interfaces.
+ */
 public class NotifierBatteryLevel implements Predicate, IVisitable<IControllerVisitor> {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
-	
+
 	private AID aid;
 	private BatteryLevel batteryLevel;
-	
-	public NotifierBatteryLevel(){}
 
+	/**
+	 * Default constructor.
+	 */
+	public NotifierBatteryLevel() {
+	}
+
+	/**
+	 * Parameterized constructor to set the values of the notifier battery level.
+	 * @param aid the AID of the agent.
+	 * @param batteryLevel the battery level.
+	 */
 	public NotifierBatteryLevel(AID aid, BatteryLevel batteryLevel) {
 		super();
 		this.aid = aid;
@@ -38,6 +54,10 @@ public class NotifierBatteryLevel implements Predicate, IVisitable<IControllerVi
 		this.batteryLevel = batteryLevel;
 	}
 
+	/**
+	 * Accepts a controller visitor to process the NotifierBatteryLevel instance.
+	 * @param visitor the controller visitor.
+	 */
 	public void accept(IControllerVisitor visitor) {
 		visitor.visit(this);
 	}

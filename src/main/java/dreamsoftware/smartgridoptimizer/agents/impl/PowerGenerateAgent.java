@@ -1,10 +1,7 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -32,6 +29,7 @@ import dreamsoftware.smartgridoptimizer.ontology.visitor.IPowerGenerateVisitor;
 
 public final class PowerGenerateAgent extends PublishSubscribeAgent implements IPowerGenerateVisitor {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	public final static String AGENT_NAME = "POWER_GENERATE_AGENT";
@@ -40,11 +38,12 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 	public static Double GEN_FACTOR = 24.0;
 	private static final Integer NOTIFY_INTERVAL = 1000;
 	
-	private Logger logger = LoggerFactory.getLogger(PowerGenerateAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(PowerGenerateAgent.class);
 	private Double ppower = 0.0;
 	
 	private HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -88,12 +87,10 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 		            	}
 		            }
 		         
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				if(csvGenerationMeasures.size() > 0) {
 					myAgent.addBehaviour(new PeriodicallyReportPowerGeneratedBehaviour(myAgent, NOTIFY_INTERVAL, csvGenerationMeasures));
 				}
@@ -123,7 +120,6 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 	
 	/**
 	 * Tick Behaviour to periodically report the energy generated
-	 * @author BISITE
 	 *
 	 */
 	class PeriodicallyReportPowerGeneratedBehaviour extends TickerBehaviour {

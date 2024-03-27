@@ -174,7 +174,6 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 	
 	/**
 	 * Tick Behaviour to periodically check budget
-	 * @author BISITE
 	 */
 	class PeriodicallyCheckBudgetBehaviour extends TickerBehaviour {
 		
@@ -196,7 +195,6 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 	
 	/**
 	 * Tick Behaviour to periodically update price
-	 * @author BISITE
 	 */
 	class PeriodicallyUpdatePriceBehaviour extends TickerBehaviour {
 		

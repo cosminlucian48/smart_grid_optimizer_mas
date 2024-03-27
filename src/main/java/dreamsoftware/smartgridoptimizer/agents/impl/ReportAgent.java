@@ -2,6 +2,7 @@ package dreamsoftware.smartgridoptimizer.agents.impl;
 
 import java.io.File;
 import java.io.InputStream;
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.HashMap;
@@ -39,8 +40,9 @@ import net.sf.jasperreports.export.SimpleXlsReportConfiguration;
 
 public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor {
 	
-	private Logger logger = LoggerFactory.getLogger(ReportAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(ReportAgent.class);
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	public final static String AGENT_NAME = "REPORT_AGENT";
@@ -178,7 +180,6 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 
 	/**
 	 * Behaviour for generate report from Mashes Status.
-	 * @author BISITE
 	 */
 	public class GenerateReportBehaviour extends TickerBehaviour {
 		

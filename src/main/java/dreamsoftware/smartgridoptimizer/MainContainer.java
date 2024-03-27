@@ -70,9 +70,13 @@ public final class MainContainer {
 						"home3:dreamsoftware.smartgridoptimizer.agents.impl.PowerLoadAgent;" +
 						"office1:dreamsoftware.smartgridoptimizer.agents.impl.PowerLoadAgent;" +
 						"office2:dreamsoftware.smartgridoptimizer.agents.impl.PowerLoadAgent;" +
-						"office3:dreamsoftware.smartgridoptimizer.agents.impl.PowerLoadAgent;" +
 						"pv:dreamsoftware.smartgridoptimizer.agents.impl.PowerGenerateAgent;" +
+						"pv2:dreamsoftware.smartgridoptimizer.agents.impl.PowerGenerateAgent;" +
+						"pv3:dreamsoftware.smartgridoptimizer.agents.impl.PowerGenerateAgent;" +
+						"pv4:dreamsoftware.smartgridoptimizer.agents.impl.PowerGenerateAgent;" +
 						"battery:dreamsoftware.smartgridoptimizer.agents.impl.BatteryAgent;" +
+						"battery2:dreamsoftware.smartgridoptimizer.agents.impl.BatteryAgent;" +
+						"battery3:dreamsoftware.smartgridoptimizer.agents.impl.BatteryAgent;" +
 						MarketAgent.AGENT_NAME + ":dreamsoftware.smartgridoptimizer.agents.impl.MarketAgent;" +
 						ReportAgent.AGENT_NAME + ":dreamsoftware.smartgridoptimizer.agents.impl.ReportAgent;");
 		Profile containerProfile = new ProfileImpl(containerProps);

@@ -1,10 +1,7 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStream;
-import java.io.InputStreamReader;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -34,6 +31,7 @@ import dreamsoftware.smartgridoptimizer.ontology.visitor.IPowerLoadVisitor;
 
 public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowerLoadVisitor {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	public final static String AGENT_NAME = "POWER_LOAD_AGENT";
@@ -44,12 +42,13 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
         
     private String localName;
 	
-	private Logger logger = LoggerFactory.getLogger(PowerLoadAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(PowerLoadAgent.class);
 	
 	private Double pload = 0.0;
 	
-	private HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
+	private final HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -76,6 +75,7 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
 		 */
 		this.addBehaviour(new OneShotBehaviour() {
 			
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -87,10 +87,10 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
 						
 				BufferedReader br = null;
 				
-				List<Double> csvLoads = new ArrayList<Double>();
+				List<Double> csvLoads = new ArrayList<>();
 				
 				try {
-					br = new BufferedReader(new InputStreamReader(inputStream, "UTF-8"));
+					br = new BufferedReader(new InputStreamReader(inputStream, StandardCharsets.UTF_8));
 					String line = "";
 		            while ((line = br.readLine()) != null) {
 		            	// check if is a double value.
@@ -99,12 +99,9 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
 		            	}
 		            }
 		         
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
 				if(csvLoads.size() > 0) {
 					myAgent.addBehaviour(new PeriodicallyReportConsumptionBehaviour(myAgent, NOTIFY_INTERVAL, csvLoads));
 				} else {
@@ -135,7 +132,6 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
 		resourceInfo.setJmxDomainName(AGENT_NAME);
 		resourceInfo.setJmxBeanName(this.getAID().getLocalName());
 		resourceInfo.setJmxDescription(AGENT_DESCRIPTION);
-		
 		attributeFieldInfoList.add(new JmxAttributeFieldInfo("LOAD_FACTOR", true, true, "Load Factor for all Power load Agents"));
 	}
 	
@@ -144,21 +140,21 @@ public final class PowerLoadAgent extends PublishSubscribeAgent implements IPowe
 	 */
 	class PeriodicallyReportConsumptionBehaviour extends TickerBehaviour {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 		
-		private List<Double> loads;
+		private final List<Double> loadList;
 		private Integer ticks = 0;
 		
-		public PeriodicallyReportConsumptionBehaviour(Agent a, long period, List<Double> loads) {
+		public PeriodicallyReportConsumptionBehaviour(Agent a, long period, List<Double> loadList) {
 			super(a, period);
-			this.loads = loads;
+			this.loadList = loadList;
 		}
 
 		@Override
 		protected void onTick() {
-			
-			if(ticks >= loads.size()) ticks = 0;
-			pload = loads.get(ticks++);
+			if(ticks >= loadList.size()) ticks = 0;
+			pload = loadList.get(ticks++);
 			logger.info(PowerLoadAgent.this.getName() + " create power load [" + pload + "]");
 			PerformConsumption performConsumption = new PerformConsumption(getAID(), new LoadConsumption(pload));
 			// notify load to subscribers.

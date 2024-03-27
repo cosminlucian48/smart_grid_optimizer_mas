@@ -1,17 +1,17 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
+import java.io.Serial;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import jade.util.leap.Iterator;
 import jade.content.ContentElement;
 import jade.content.lang.Codec;
 import jade.content.lang.Codec.CodecException;
 import jade.content.lang.sl.SLCodec;
 import jade.content.onto.Ontology;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
 import jade.core.AID;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
@@ -45,21 +45,22 @@ import dreamsoftware.smartgridoptimizer.ontology.visitor.IClientVisitor;
 
 public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary, IClientVisitor {
 
-	private Logger logger = LoggerFactory.getLogger(ClientAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(ClientAgent.class);
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	public final static String AGENT_NAME = "CLIENT_AGENT";
 	
 	private final static Long POLLING_INTERVAL = 500L;
 	public final static Integer CHANGE_POWER_CONSUMPTION_MEASURES = 1;
 	
-	protected Codec codec = new SLCodec();
-	protected Ontology ontology = SmartGridOntology.getInstance();
-    transient protected ISmartGridMonitor monitorGUI;
+	private final Codec codec = new SLCodec();
+	private final Ontology ontology = SmartGridOntology.getInstance();
+    private transient ISmartGridMonitor monitorGUI;
     
-    private List<AID> batteryAgentAids = new ArrayList<AID>();
-    private List<AID> generateEnergyAgentAids = new ArrayList<AID>();
-    private List<AID> loadEnergyAgentAids = new ArrayList<AID>();
+    private final List<AID> batteryAgentAids = new ArrayList<>();
+    private final List<AID> generateEnergyAgentAids = new ArrayList<>();
+    private final List<AID> loadEnergyAgentAids = new ArrayList<>();
     
     
     /***
@@ -81,6 +82,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
     	
     	this.addBehaviour(new AchieveREInitiator(this, queryBatteryLevel) {
     		
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -90,15 +92,10 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 					ContentElement ce = getContentManager().extractContent(inform);
 					IClientVisitable visitableMsg = (IClientVisitable)ce;
 					visitableMsg.accept(ClientAgent.this);
-				} catch (UngroundedException e) {
-					e.printStackTrace();
-				} catch (CodecException e) {
-					e.printStackTrace();
-				} catch (OntologyException e) {
+				} catch (CodecException | OntologyException e) {
 					e.printStackTrace();
 				}
 			}
-    		
     	});
     }
     
@@ -118,17 +115,17 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 	private void subscribeToService(String serviceName) {
 
 		SearchConstraints onlyOne = new SearchConstraints();
-		onlyOne.setMaxResults(-1l);
+		onlyOne.setMaxResults(-1L);
 
 		addBehaviour(new SubscriptionInitiator(this, createDFSubscriptionFor(serviceName, onlyOne)) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
 				super.handleInform(inform);
 				try {
-
 					DFAgentDescription[] agentsDescription = DFService.decodeNotification(inform.getContent());
 					if (agentsDescription.length > 0) {
 						for(DFAgentDescription agentDesc: agentsDescription) {
@@ -137,6 +134,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 							messageSub.addReceiver(agentDesc.getName());
 							myAgent.addBehaviour(new SubscriptionInitiator(myAgent, messageSub) {
 								
+								@Serial
 								private static final long serialVersionUID = 1L;
 
 								@Override
@@ -146,24 +144,18 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 										ContentElement ce = getContentManager().extractContent(inform);
 										IClientVisitable visitableMsg = (IClientVisitable)ce;
 										visitableMsg.accept(ClientAgent.this);
-									} catch (UngroundedException e) {
-										e.printStackTrace();
-									} catch (CodecException e) {
-										e.printStackTrace();
-									} catch (OntologyException e) {
+									} catch (CodecException | OntologyException e) {
 										e.printStackTrace();
 									}
 								} 
 							});
 				    	}
 					}
-
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
 			}
 		});
-
 	}
     
 	private void subscribeToService(String[] serviceNames) { 
@@ -176,6 +168,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 		// Observe Generate Energy Agents
 		addBehaviour(new SubscriptionInitiator(this, createDFSubscriptionFor(REPORT_GENERATED_ENERGY, null)) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -185,7 +178,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 					DFAgentDescription[] agentsDescription = DFService.decodeNotification(inform.getContent());
 					if (agentsDescription.length > 0) {
 						for(DFAgentDescription agentDesc: agentsDescription) {
-							Iterator<ServiceDescription> services = agentDesc.getAllServices();
+							Iterator services = agentDesc.getAllServices();
 							if(services.hasNext()) {
 								loadEnergyAgentAids.add(agentDesc.getName());
 								monitorGUI.addGenerateEnergyAgent(agentDesc.getName().getLocalName());
@@ -205,6 +198,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 		//Observe Load Energy Agents
 		addBehaviour(new SubscriptionInitiator(this, createDFSubscriptionFor(REPORT_LOAD_ENERGY, null)) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -214,7 +208,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 					DFAgentDescription[] agentsDescription = DFService.decodeNotification(inform.getContent());
 					if (agentsDescription.length > 0) {
 						for(DFAgentDescription agentDesc: agentsDescription) {
-							Iterator<ServiceDescription> services = agentDesc.getAllServices();
+							Iterator services = agentDesc.getAllServices();
 							if(services.hasNext()) {
 								generateEnergyAgentAids.add(agentDesc.getName());
 								monitorGUI.addConsumptionEnergyAgent(agentDesc.getName().getLocalName());
@@ -234,6 +228,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 		// Observe battery Agents
 		addBehaviour(new SubscriptionInitiator(this, createDFSubscriptionFor(REPORT_BATTERY_LEVEL, null)) {
 
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
@@ -243,7 +238,7 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 					DFAgentDescription[] agentsDescription = DFService.decodeNotification(inform.getContent());
 					if (agentsDescription.length > 0) { 
 						for (DFAgentDescription agentDesc : agentsDescription) {
-		                    Iterator<ServiceDescription> services = agentDesc.getAllServices();
+		                    Iterator services = agentDesc.getAllServices();
 		                    if (services.hasNext()) {
 		                    	batteryAgentAids.add(agentDesc.getName());
 		                    	monitorGUI.addBatteryAgent(agentDesc.getName().getLocalName());
@@ -276,11 +271,11 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 		// We plan behavior to polling the status of all available agents
 		this.addBehaviour(new TickerBehaviour(this, POLLING_INTERVAL) {
 			
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			protected void onTick() {
-				
 				try {
 					// Query Battery Levels.
 					queryStatus(batteryAgentAids);
@@ -288,12 +283,9 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 					queryStatus(generateEnergyAgentAids);
 					// Query Consumed energy
 					queryStatus(loadEnergyAgentAids);
-				} catch (CodecException e) {
-					e.printStackTrace();
-				} catch (OntologyException e) {
+				} catch (CodecException | OntologyException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		});
 	}
@@ -333,19 +325,13 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 						fipaRequestMessage.addReceiver(agent.getName());
 					}
 					this.addBehaviour(new AchieveREInitiator(this, fipaRequestMessage) {
+						@Serial
 						private static final long serialVersionUID = 1L;
-						
 					});
 				}
-			} catch (FIPAException e) {
-				e.printStackTrace();
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
-				// TODO Auto-generated catch block
+			} catch (FIPAException | CodecException | OntologyException e) {
 				e.printStackTrace();
 			}
-			
 		}
 	}
 

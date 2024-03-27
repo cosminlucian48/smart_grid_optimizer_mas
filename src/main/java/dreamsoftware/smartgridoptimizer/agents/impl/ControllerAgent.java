@@ -1,50 +1,41 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
-import java.io.Serial;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Map.Entry;
-import jade.core.AID;
-import org.apache.commons.lang.ArrayUtils;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.j256.simplejmx.common.JmxAttributeFieldInfo;
 import com.j256.simplejmx.common.JmxAttributeMethodInfo;
 import com.j256.simplejmx.common.JmxOperationInfo;
 import com.j256.simplejmx.common.JmxResourceInfo;
+import dreamsoftware.smartgridoptimizer.agents.NotifierAgent;
+import dreamsoftware.smartgridoptimizer.ontology.concepts.LoadConsumption;
+import dreamsoftware.smartgridoptimizer.ontology.concepts.Surplus;
+import dreamsoftware.smartgridoptimizer.ontology.predicates.*;
+import dreamsoftware.smartgridoptimizer.ontology.visitable.IVisitable;
+import dreamsoftware.smartgridoptimizer.ontology.visitor.IControllerVisitor;
 import jade.content.ContentElement;
 import jade.content.lang.Codec.CodecException;
 import jade.content.onto.OntologyException;
-import jade.content.onto.UngroundedException;
+import jade.core.AID;
 import jade.core.Agent;
-import jade.core.behaviours.TickerBehaviour;
 import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
 import jade.domain.DFService;
-import jade.domain.FIPAException;
-import jade.domain.FIPANames;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
+import jade.domain.FIPAException;
+import jade.domain.FIPANames;
 import jade.lang.acl.ACLMessage;
 import jade.proto.AchieveREInitiator;
 import jade.proto.SubscriptionInitiator;
 import jade.proto.SubscriptionResponder.Subscription;
-import dreamsoftware.smartgridoptimizer.agents.NotifierAgent;
-import dreamsoftware.smartgridoptimizer.ontology.concepts.LoadConsumption;
-import dreamsoftware.smartgridoptimizer.ontology.concepts.Surplus;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.BuyPower;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.GenerateEnergy;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.IterationStatus;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.NotifierBatteryLevel;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.PerformConsumption;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.RetrieveDemand;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.SellingPower;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.StoreInBattery;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.UpdateLoad;
-import dreamsoftware.smartgridoptimizer.ontology.visitable.IVisitable;
-import dreamsoftware.smartgridoptimizer.ontology.visitor.IControllerVisitor;
+import org.apache.commons.lang.ArrayUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serial;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Map.Entry;
 
 public class ControllerAgent extends NotifierAgent implements IControllerVisitor {
 	
@@ -85,7 +76,6 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 			
 			@Serial
 			private static final long serialVersionUID = 1L;
-		
 
 			@Override
 			protected void handleInform(ACLMessage inform) {
@@ -103,7 +93,6 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 				}
 			} 
 		});
-    	
     }
     
     // Lookup Generated Energy Agents
@@ -128,14 +117,12 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 				super.handleInform(inform);
 				logger.debug("Agent " + getLocalName() + ": Notification received from DF");
 				try {
-					
 					DFAgentDescription[] results = DFService.decodeNotification(inform.getContent());
 					logger.debug("GeneratedEnergyAgents: " + results.length);
 					if (results.length > 0) {
 						subscribeToServices(results);
 						generatedEnergyAgents = (DFAgentDescription[]) ArrayUtils.addAll(generatedEnergyAgents, results);
 					}
-
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
@@ -166,7 +153,6 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 				super.handleInform(inform);
 				logger.debug("Agent " + getLocalName() + ": Notification received from DF");
 				try {
-					
 					DFAgentDescription[] results = DFService.decodeNotification(inform.getContent());
 					logger.debug("BatteryAgents: " + results.length);
 					if (results.length > 0) {
@@ -174,15 +160,13 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 						for(DFAgentDescription result: results)
 							batteryLevels.put(result.getName(), 0.0);
 					}
-
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
 			}
 		});
 	}
-    
-   
+
 	private void subscribeToServices(DFAgentDescription[] agents) {
 		for (DFAgentDescription agentDes : agents) {
 			// subscribe to each agent.
@@ -231,17 +215,14 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 	@Override
 	protected void onCreateMBean(JmxResourceInfo resourceInfo, List<JmxAttributeFieldInfo> attributeFieldInfoList,
 								 List<JmxAttributeMethodInfo> attributeMethodInfoList, List<JmxOperationInfo> operationInfoList) {
-		
 		resourceInfo.setJmxDomainName(AGENT_NAME);
 		resourceInfo.setJmxBeanName(this.getAID().getLocalName());
 		resourceInfo.setJmxDescription(AGENT_DESCRIPTION);
 	}
-	
-	/**
-	 * @author BISITE
-	 */
+
 	private class SubscribeToService extends SubscriptionInitiator {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 		
 		public SubscribeToService(Agent a, ACLMessage msg) {
@@ -263,28 +244,20 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 		@Override
 		protected void handleInform(ACLMessage inform) {
 			super.handleInform(inform);
-
 			try {
 				ContentElement ce = getContentManager().extractContent(inform);
 				@SuppressWarnings("unchecked")
 				IVisitable<IControllerVisitor> visitableMsg = (IVisitable<IControllerVisitor>)ce;
 				visitableMsg.accept(ControllerAgent.this);
-			} catch (UngroundedException e) {
-				e.printStackTrace();
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
+			} catch (CodecException | OntologyException e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
-	
-	/**
-	 * @author BISITE
-	 */
+
 	private class CheckPower extends TickerBehaviour {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public CheckPower(Agent a, long period) {
@@ -293,9 +266,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 
 		private Double getTotalBattery() {
 			Double totalbattery = 0.0;
-			Iterator<Map.Entry<AID, Double>> it = batteryLevels.entrySet().iterator();
-			while (it.hasNext()) {
-				Map.Entry<AID, Double> pair = (Entry<AID, Double>) it.next();
+			for (Entry<AID, Double> pair : batteryLevels.entrySet()) {
 				totalbattery += pair.getValue();
 			}
 			return totalbattery;
@@ -303,36 +274,35 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 
 		@Override
 		protected void onTick() {
-			Double sp = ppower - pload;
+			double sp = ppower - pload;
 			logger.debug("surplus:" + sp);
 			try {
 
-				Double totalbattery = getTotalBattery();
-				Double maxbat = BatteryAgent.CELL_MAX_BAT_LEVEL * batteryLevels.size();
-				Double toBuy = 0.0;
-				Double pToSell = 0.0;
-				Double batteryLevel = 0.0;
-				Double adjustLoad = 0.0;
+				Double totalBattery = getTotalBattery();
+				Double maxBat = BatteryAgent.CELL_MAX_BAT_LEVEL * batteryLevels.size();
+				double toBuy = 0.0;
+				double pToSell = 0.0;
+				double batteryLevel = 0.0;
+				double adjustLoad = 0.0;
 				// get battery agents AID
-				List<AID> batteryAgentsAID = new ArrayList<AID>();
+				List<AID> batteryAgentsAID = new ArrayList<>();
 				for (DFAgentDescription batteryAgent : batteryAgents)
 					batteryAgentsAID.add(batteryAgent.getName());
-
 				if (sp > 0) {
 					// if we have surplus try to store it in the battery and
 					// sell the excedent
-					Double batroom = maxbat - totalbattery;
+					double batroom = maxBat - totalBattery;
 					logger.debug("batroom -> " + batroom);
 					ACLMessage storeInBatMessage;
 					if (sp <= batroom) {
 						// store in bat sp
 						logger.debug("storing in bat:" + sp);
-						batteryLevel = totalbattery + sp;
+						batteryLevel = totalBattery + sp;
 						storeInBatMessage = createFipaRequest(
 								new StoreInBattery(new Surplus(sp / batteryLevels.size())), batteryAgentsAID);
 					} else {
 						logger.debug("store the maximum available ...");
-						batteryLevel = totalbattery + batroom;
+						batteryLevel = totalBattery + batroom;
 						storeInBatMessage = createFipaRequest(
 								new StoreInBattery(new Surplus(batroom / batteryLevels.size())), batteryAgentsAID);
 						pToSell = sp - batroom;
@@ -343,33 +313,31 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 					myAgent.addBehaviour(new StorePowerInBattery(myAgent, storeInBatMessage));
 
 				} else {
-
 					Double demand = Math.abs(sp);
-					logger.debug("totalbattery -> " + totalbattery);
+					logger.debug("totalBattery -> " + totalBattery);
 					logger.debug("Power demanded: " + demand);
-					// Retreive stored power and buy more power if needed
+					// Retrieve stored power and buy more power if needed
 					ACLMessage retrieveDemandMessage;
-					if(demand <= totalbattery){
-						batteryLevel = totalbattery - demand;
+					if(demand <= totalBattery){
+						batteryLevel = totalBattery - demand;
 						retrieveDemandMessage = createFipaRequest(
 								new RetrieveDemand(new Surplus(demand / batteryLevels.size())), batteryAgentsAID);
 					} else {
 						batteryLevel = 0.0;
 						retrieveDemandMessage = createFipaRequest(
-								new RetrieveDemand(new Surplus(totalbattery / batteryLevels.size())), batteryAgentsAID);
+								new RetrieveDemand(new Surplus(totalBattery / batteryLevels.size())), batteryAgentsAID);
 						// power to buy
-						toBuy = demand - totalbattery;
+						toBuy = demand - totalBattery;
 						logger.debug("buy power: " + toBuy);
 						ACLMessage buyPowerRequest = createFipaRequest(new BuyPower(new Surplus(toBuy)),
 								new AID(MarketAgent.AGENT_NAME, AID.ISLOCALNAME));
 						myAgent.addBehaviour(new BuyPowerRequest(myAgent, buyPowerRequest));
-						
 					}
 					myAgent.addBehaviour(new RetrieveDemandRequest(myAgent, retrieveDemandMessage));
 					
 					// update loads with this power.
 					logger.debug("Update Loads ....");
-					List<AID> receivers = new ArrayList<AID>();
+					List<AID> receivers = new ArrayList<>();
 					for (DFAgentDescription loadEnergyAgent : loadEnergyAgents) {
 						receivers.add(loadEnergyAgent.getName());
 					}
@@ -377,9 +345,7 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 					ACLMessage updateLoadRequest = createFipaRequest(
 							new UpdateLoad(new LoadConsumption(demand / loadEnergyAgents.length)), receivers);
 					myAgent.addBehaviour(new UpdateLoadRequest(myAgent, updateLoadRequest));
-
 				}
-
 				IterationStatus iteStatus = new IterationStatus();
 				iteStatus.setPowerGeneratedValue(ppower);
 				iteStatus.setLoadConsumptionValue(pload);
@@ -388,32 +354,27 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 				iteStatus.setPowerSoldValue(pToSell);
 				iteStatus.setBatteryLevelValue(batteryLevel);
 				iteStatus.setAdjustLoadValue(adjustLoad);
-			
 
 				myAgent.addBehaviour(new NotifyIterationStatus(iteStatus));
 
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
+			} catch (CodecException | OntologyException e) {
 				e.printStackTrace();
 			}
-
 			// reset data
 			ppower = 0.0;
 			pload = 0.0;
-
 		}
 	}
 	
 	/**
 	 * Behaviour for Notify the current Iteration Status
-	 * @author BISITE
 	 */
 	private class NotifyIterationStatus extends OneShotBehaviour {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 		
-		private IterationStatus iterationStatus;
+		private final IterationStatus iterationStatus;
 		
 		public NotifyIterationStatus(IterationStatus iterationStatus) {
 			super();
@@ -427,26 +388,23 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 				msgInform.setLanguage(codec.getName());
 				msgInform.setOntology(ontology.getName());
 				getContentManager().fillContent(msgInform, iterationStatus);
-				// Send Message to each Subscriptor
+				// Send Message to each subscription
 				for (Subscription subscription : subscriptions) {
 					subscription.notify(msgInform);
 				}
-			} catch (CodecException e) {
-				e.printStackTrace();
-			} catch (OntologyException e) {
+			} catch (CodecException | OntologyException e) {
 				e.printStackTrace();
 			}
 		}
-		
 	}
 	
 	
 	/**
 	 * Request for init buy power process
-	 * @author BISITE
 	 */
-	private class BuyPowerRequest extends AchieveREInitiator {
+	private static class BuyPowerRequest extends AchieveREInitiator {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public BuyPowerRequest(Agent a, ACLMessage msg) {
@@ -466,10 +424,10 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 	
 	/**
 	 * Request for init selling power process
-	 * @author BISITE
 	 */
 	private class SellingPowerRequest extends AchieveREInitiator {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public SellingPowerRequest(Agent a, ACLMessage msg) {
@@ -490,11 +448,10 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 	
 	/**
 	 * Request for Retrieve power demand request
-	 * @author BISITE
-	 *
 	 */
 	private class RetrieveDemandRequest extends AchieveREInitiator {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public RetrieveDemandRequest(Agent a, ACLMessage msg) {
@@ -518,15 +475,14 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 			super.handleRefuse(refuse);
 			logger.debug("Energy can`t retrieved from battery " + refuse.getSender().getName());
 		}
-
 	}
 	
 	/**
 	 * Request for store power in batteries process
-	 * @author BISITE
 	 */
 	private class StorePowerInBattery extends AchieveREInitiator {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 		
 		public StorePowerInBattery(Agent a, ACLMessage msg) {
@@ -552,15 +508,14 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 			super.handleRefuse(refuse);
 			logger.debug("Energy can`t stored in the battery " + refuse.getSender().getName());
 		}
-		
 	}
 	
 	/**
 	 * Request for update load for all product load agents
-	 * @author BISITE
 	 */
-	private class UpdateLoadRequest extends AchieveREInitiator {
+	private static class UpdateLoadRequest extends AchieveREInitiator {
 
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public UpdateLoadRequest(Agent a, ACLMessage msg) {
