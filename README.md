@@ -2,6 +2,8 @@
 
 SmartGrid Optimizer is a distributed energy management system designed to optimize the operation of smart grids. It utilizes a multi-agent system framework to efficiently manage energy production, load, and storage across different locations in an electrical grid.
 
+This project is based on an agent-centric development approach, implemented using the JADE (Java Agent DEvelopment Framework) framework. Agents, autonomous software entities capable of decision-making and action-taking in a specific environment, play a pivotal role in coordinating and optimizing the operations of the electrical grid.
+
 ## 🚀 Features
 
 - **Multi-Agent System Integration**: Utilizes JADE (Java Agent DEvelopment Framework) for implementing a multi-agent system architecture.
@@ -10,6 +12,25 @@ SmartGrid Optimizer is a distributed energy management system designed to optimi
 - **Optimization Algorithms**: Implements optimization algorithms to maximize the use of renewable energy sources and minimize operational costs.
 - **Scalability and Flexibility**: Offers a flexible and scalable tool for simulating and analyzing distributed energy systems.
 
+## 🤖 What is a Multi-Agent System?
+
+A **Multi-Agent System (MAS)** is a computational system composed of multiple autonomous agents that interact with each other and their environment to achieve individual and collective goals. Each agent operates independently, possesses its own knowledge, and has the ability to perceive, reason, and act based on its internal state and external stimuli.
+
+In the context of SmartGrid Optimizer, agents represent various entities within the electrical grid ecosystem, such as energy generators, consumers, batteries, and market intermediaries. These agents collaborate and compete to optimize energy production, distribution, and consumption, leading to efficient grid operation and resource utilization.
+
+## 💡 Advantages of a Multi-Agent System Approach
+
+* **Decentralization:** A MAS distributes decision-making and control across multiple agents, allowing for decentralized and distributed management of complex systems. This leads to increased scalability and robustness, as the system can adapt to changes without relying on a central authority.
+
+* **Flexibility and Adaptability:** Agents in a MAS are autonomous and capable of learning and adaptation. This enables the system to dynamically respond to changes in the environment, user preferences, and system requirements, leading to more flexible and adaptive behavior.
+
+* **Modularity and Reusability:** MAS promotes a modular design where agents encapsulate specific functionalities or behaviors. This modular structure enhances reusability, as agents can be easily repurposed or replaced to accommodate different scenarios or requirements.
+
+* **Efficiency and Optimization:** By leveraging distributed intelligence and collaboration, MAS can achieve global optimization and resource allocation. Agents can coordinate their actions to achieve collective goals, leading to improved efficiency and performance.
+
+* **Scalability:** MAS exhibits inherent scalability, as the addition of new agents does not necessarily impact the overall system complexity or performance. This allows the system to scale gracefully with increasing size or complexity, making it suitable for large-scale applications.
+
+* **Resilience and Fault Tolerance:** MAS can exhibit robustness and fault tolerance due to their decentralized nature. Failure or malfunction of individual agents does not necessarily disrupt the entire system, as other agents can compensate or take over responsibilities, ensuring continued operation.
 
 ### BatteryAgent
 
