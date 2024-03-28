@@ -1,8 +1,14 @@
 package dreamsoftware.smartgridoptimizer.agents;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.Serial;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.regex.Pattern;
 
 import javax.management.JMException;
 
@@ -36,7 +42,7 @@ import jade.core.AID;
  * The ISmartGridAgent class represents an abstract agent responsible for managing services and JMX registration.
  * It extends the Jade Agent class.
  */
-public abstract class ISmartGridAgent extends Agent implements ISmartGridVocabulary {
+public abstract class AbstractSmartGridAgent extends Agent implements ISmartGridVocabulary {
 	
 	private final Logger logger = LoggerFactory.getLogger(PowerLoadAgent.class);
 
@@ -170,5 +176,23 @@ public abstract class ISmartGridAgent extends Agent implements ISmartGridVocabul
 		ACLMessage fipaRequestMessage = createFipaRequest(content);
 		fipaRequestMessage.addReceiver(receiver);
 		return fipaRequestMessage;
+	}
+
+	protected List<Double> loadCSV(String csvFile) {
+		List<Double> netPrices = new ArrayList<>();
+		try (BufferedReader br = new BufferedReader(new InputStreamReader(Objects.requireNonNull(getClass().getResourceAsStream(csvFile)), StandardCharsets.UTF_8))) {
+			String line;
+			while ((line = br.readLine()) != null) {
+				// Check if it's a double value.
+				if (Pattern.matches("([0-9]*)\\.([0-9]*)", line)) {
+					netPrices.add(Double.parseDouble(line));
+				}
+			}
+			logger.debug("CSV file loaded successfully: " + csvFile);
+		} catch (IOException e) {
+			logger.debug("Failed to load CSV file: " + csvFile);
+			e.printStackTrace();
+		}
+		return netPrices;
 	}
 }

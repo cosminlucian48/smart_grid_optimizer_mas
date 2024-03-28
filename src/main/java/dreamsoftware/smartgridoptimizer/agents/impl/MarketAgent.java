@@ -1,17 +1,18 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.j256.simplejmx.common.JmxAttributeFieldInfo;
 import com.j256.simplejmx.common.JmxAttributeMethodInfo;
 import com.j256.simplejmx.common.JmxOperationInfo;
 import com.j256.simplejmx.common.JmxResourceInfo;
+import dreamsoftware.smartgridoptimizer.agents.PublishSubscribeAgent;
+import dreamsoftware.smartgridoptimizer.agents.behaviours.HandlerRequest;
+import dreamsoftware.smartgridoptimizer.ontology.concepts.CurrentBudget;
+import dreamsoftware.smartgridoptimizer.ontology.concepts.CurrentPrice;
+import dreamsoftware.smartgridoptimizer.ontology.concepts.PowerBought;
+import dreamsoftware.smartgridoptimizer.ontology.concepts.PowerSold;
+import dreamsoftware.smartgridoptimizer.ontology.predicates.*;
+import dreamsoftware.smartgridoptimizer.ontology.visitable.IMarketVisitable;
+import dreamsoftware.smartgridoptimizer.ontology.visitor.IMarketVisitor;
 import jade.content.ContentElement;
 import jade.content.Predicate;
 import jade.core.Agent;
@@ -19,25 +20,15 @@ import jade.core.behaviours.OneShotBehaviour;
 import jade.core.behaviours.TickerBehaviour;
 import jade.domain.FIPAAgentManagement.DFAgentDescription;
 import jade.domain.FIPAAgentManagement.ServiceDescription;
-import dreamsoftware.smartgridoptimizer.agents.PublishSubscribeAgent;
-import dreamsoftware.smartgridoptimizer.agents.behaviours.HandlerRequest;
-import dreamsoftware.smartgridoptimizer.ontology.concepts.CurrentBudget;
-import dreamsoftware.smartgridoptimizer.ontology.concepts.CurrentPrice;
-import dreamsoftware.smartgridoptimizer.ontology.concepts.PowerBought;
-import dreamsoftware.smartgridoptimizer.ontology.concepts.PowerSold;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.BuyPower;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.GetStatus;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.NotifierCurrentBudget;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.NotifierCurrentPrice;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.NotifierTotalPowerBought;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.NotifierTotalPowerSold;
-import dreamsoftware.smartgridoptimizer.ontology.predicates.SellingPower;
-import dreamsoftware.smartgridoptimizer.ontology.visitable.IMarketVisitable;
-import dreamsoftware.smartgridoptimizer.ontology.visitor.IMarketVisitor;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serial;
+import java.util.List;
 
 public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor {
 	
-	private Logger logger = LoggerFactory.getLogger(MarketAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(MarketAgent.class);
 	
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -72,45 +63,27 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 		}
 		
 	};
-	
+
 	@Override
 	protected void setup() {
 		super.setup();
 		this.addBehaviour(handlerRequest);
-		
-		//  Behaviour for load csv with price value at the given time.
+
+		// Behavior for loading CSV with price values at the given time
 		this.addBehaviour(new OneShotBehaviour() {
-			
+
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void action() {
-				
-				String csvFile = "/csv/net_price.csv";
-				BufferedReader br = null;
-				
-				List<Double> netPrices = new ArrayList<Double>();
-				
-				try {
-					br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(csvFile), "UTF-8"));
-					String line = "";
-		            while ((line = br.readLine()) != null) {
-		            	// check if is a double value.
-		            	if(Pattern.matches("([0-9]*)\\.([0-9]*)", line)){
-		            		netPrices.add(Double.parseDouble(line));
-		            	}
-		            }
-		         
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				if(netPrices.size() > 0) {
+				List<Double> netPrices = loadCSV("/csv/net_price.csv");
+				if (!netPrices.isEmpty()) {
 					myAgent.addBehaviour(new PeriodicallyUpdatePriceBehaviour(myAgent, UPDATE_PRICE_INTERVAL, netPrices));
 					myAgent.addBehaviour(new PeriodicallyCheckBudgetBehaviour(myAgent, CHECK_BUDGET_INTERVAL));
 				}
 			}
-			
+
 		});
 	}
 
@@ -172,6 +145,7 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 	 */
 	class PeriodicallyCheckBudgetBehaviour extends TickerBehaviour {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public PeriodicallyCheckBudgetBehaviour(Agent a, long period) {

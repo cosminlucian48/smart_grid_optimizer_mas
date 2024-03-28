@@ -56,7 +56,7 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 	// Report's format
 	private ReportFormatEnum reportFormat = ReportFormatEnum.PDF_FORMAT;
 	
-	private List<IterationStatus> iterationStatusList = new ArrayList<>();
+	private final List<IterationStatus> iterationStatusList = new ArrayList<>();
 	
 	
 	@Override

@@ -24,7 +24,7 @@ import java.io.Serial;
 import java.util.HashSet;
 import java.util.Set;
 
-public abstract class PublishSubscribeAgent extends ISmartGridAgent {
+public abstract class PublishSubscribeAgent extends AbstractSmartGridAgent {
 
 	@Serial
 	private static final long serialVersionUID = 1L;

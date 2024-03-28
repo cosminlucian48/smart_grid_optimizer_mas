@@ -1,23 +1,10 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
 
-import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.regex.Pattern;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import com.j256.simplejmx.common.JmxAttributeFieldInfo;
 import com.j256.simplejmx.common.JmxAttributeMethodInfo;
 import com.j256.simplejmx.common.JmxOperationInfo;
 import com.j256.simplejmx.common.JmxResourceInfo;
-import jade.content.ContentElement;
-import jade.content.Predicate;
-import jade.core.Agent;
-import jade.core.behaviours.OneShotBehaviour;
-import jade.core.behaviours.TickerBehaviour;
-import jade.domain.FIPAAgentManagement.DFAgentDescription;
-import jade.domain.FIPAAgentManagement.ServiceDescription;
 import dreamsoftware.smartgridoptimizer.agents.PublishSubscribeAgent;
 import dreamsoftware.smartgridoptimizer.agents.behaviours.HandlerRequest;
 import dreamsoftware.smartgridoptimizer.ontology.concepts.PowerGenerated;
@@ -26,6 +13,18 @@ import dreamsoftware.smartgridoptimizer.ontology.predicates.GetStatus;
 import dreamsoftware.smartgridoptimizer.ontology.predicates.PowerCurrentlyGenerated;
 import dreamsoftware.smartgridoptimizer.ontology.visitable.IPowerGenerateVisitable;
 import dreamsoftware.smartgridoptimizer.ontology.visitor.IPowerGenerateVisitor;
+import jade.content.ContentElement;
+import jade.content.Predicate;
+import jade.core.Agent;
+import jade.core.behaviours.OneShotBehaviour;
+import jade.core.behaviours.TickerBehaviour;
+import jade.domain.FIPAAgentManagement.DFAgentDescription;
+import jade.domain.FIPAAgentManagement.ServiceDescription;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serial;
+import java.util.List;
 
 public final class PowerGenerateAgent extends PublishSubscribeAgent implements IPowerGenerateVisitor {
 
@@ -57,44 +56,25 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 			return requestVisitable.accept(PowerGenerateAgent.this);
 		}
 	};
-	
+
 	@Override
 	protected void setup() {
 		super.setup();
 		this.addBehaviour(handlerRequest);
-		//  Behaviour for load csv with load data.
+
+		// Behavior for loading CSV with generation data
 		this.addBehaviour(new OneShotBehaviour() {
-			
+
 			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override
 			public void action() {
-				
-				String csvFile = "/csv/pv.csv";
-				BufferedReader br = null;
-				
-				List<Double> csvGenerationMeasures = new ArrayList<Double>();
-				
-				try {
-					br = new BufferedReader(new InputStreamReader(getClass().getResourceAsStream(csvFile), "UTF-8"));
-					String line = "";
-		            while ((line = br.readLine()) != null) {
-		            	// check if is a double value.
-		            	if(Pattern.matches("([0-9]*)\\.([0-9]*)", line)){
-		            		csvGenerationMeasures.add(Double.parseDouble(line));
-		            	}
-		            }
-		         
-				} catch (IOException e) {
-					e.printStackTrace();
-				}
-
-				if(csvGenerationMeasures.size() > 0) {
+				List<Double> csvGenerationMeasures = loadCSV("/csv/pv.csv");
+				if (!csvGenerationMeasures.isEmpty()) {
 					myAgent.addBehaviour(new PeriodicallyReportPowerGeneratedBehaviour(myAgent, NOTIFY_INTERVAL, csvGenerationMeasures));
 				}
 			}
-			
 		});
 	}
 
@@ -123,9 +103,10 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 	 */
 	class PeriodicallyReportPowerGeneratedBehaviour extends TickerBehaviour {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 		
-		private List<Double> powerGeneratedMeasures;
+		private final List<Double> powerGeneratedMeasures;
 		private Integer tick = 0;
 		
 		public PeriodicallyReportPowerGeneratedBehaviour(Agent a, long period, List<Double> powerGeneratedMeasures) {
