@@ -41,7 +41,7 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 	private final Logger logger = LoggerFactory.getLogger(PowerGenerateAgent.class);
 	private Double ppower = 0.0;
 	
-	private HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
+	private final HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
 		
 		@Serial
 		private static final long serialVersionUID = 1L;
@@ -62,11 +62,10 @@ public final class PowerGenerateAgent extends PublishSubscribeAgent implements I
 	protected void setup() {
 		super.setup();
 		this.addBehaviour(handlerRequest);
-		/**
-		 * Behaviour for load csv with load data.
-		 */
+		//  Behaviour for load csv with load data.
 		this.addBehaviour(new OneShotBehaviour() {
 			
+			@Serial
 			private static final long serialVersionUID = 1L;
 
 			@Override

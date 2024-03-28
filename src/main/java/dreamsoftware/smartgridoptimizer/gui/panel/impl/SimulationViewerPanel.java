@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -16,23 +17,21 @@ import org.slf4j.LoggerFactory;
 
 public final class SimulationViewerPanel extends JPanel {
 
-	private Logger logger = LoggerFactory.getLogger(SimulationViewerPanel.class);
+	private final Logger logger = LoggerFactory.getLogger(SimulationViewerPanel.class);
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
-	private JPanel batteryAgentsPanel;
-	private JPanel consumptionAgentsPanelNorth;
-	private JPanel consumptionAgentsPanelEast;
+	private final JPanel batteryAgentsPanel;
+	private final JPanel consumptionAgentsPanelNorth;
+	private final JPanel consumptionAgentsPanelEast;
 	
-	private JPanel generatePowerAgentsPanel;
+	private final JPanel generatePowerAgentsPanel;
 	
-	private Map<String, AgentPanel> agentPanels = new HashMap<String, AgentPanel>();
+	private final Map<String, AgentPanel> agentPanels = new HashMap<>();
 
-	
 	public SimulationViewerPanel() {
-		
         setLayout(new BorderLayout());
-        
         consumptionAgentsPanelNorth = new JPanel(new FlowLayout(FlowLayout.LEFT));
         consumptionAgentsPanelNorth.setBackground(Color.gray);
         add(consumptionAgentsPanelNorth, BorderLayout.NORTH);

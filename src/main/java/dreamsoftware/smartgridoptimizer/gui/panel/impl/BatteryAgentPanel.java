@@ -1,9 +1,11 @@
 package dreamsoftware.smartgridoptimizer.gui.panel.impl;
 
 import java.awt.Color;
+import java.io.Serial;
 
 public class BatteryAgentPanel extends AgentPanel {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	private static final Integer BATTERY_WIDTH = 60;
@@ -21,5 +23,4 @@ public class BatteryAgentPanel extends AgentPanel {
 	    int b = (int) Math.min(255, Math.ceil(0 + value));
 		return new Color(r, g, b);
 	}
-
 }

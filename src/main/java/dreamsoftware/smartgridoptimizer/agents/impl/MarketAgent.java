@@ -1,9 +1,6 @@
 package dreamsoftware.smartgridoptimizer.agents.impl;
 
-import java.io.BufferedReader;
-import java.io.FileNotFoundException;
-import java.io.IOException;
-import java.io.InputStreamReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Pattern;
@@ -42,6 +39,7 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 	
 	private Logger logger = LoggerFactory.getLogger(MarketAgent.class);
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	public final static String AGENT_NAME = "MARKET_AGENT";
@@ -57,8 +55,9 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 	private Double price = 0.0; //current price at the given time
 	private Double budget = 0.0;
 	
-	private HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
+	private final HandlerRequest handlerRequest = new HandlerRequest(this, fipaRequestTemplate) {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		@Override
@@ -79,9 +78,7 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 		super.setup();
 		this.addBehaviour(handlerRequest);
 		
-		/**
-		 * Behaviour for load csv with price value at the given time.
-		 */
+		//  Behaviour for load csv with price value at the given time.
 		this.addBehaviour(new OneShotBehaviour() {
 			
 			private static final long serialVersionUID = 1L;
@@ -104,12 +101,10 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 		            	}
 		            }
 		         
-				} catch (FileNotFoundException e) {
-					e.printStackTrace();
 				} catch (IOException e) {
 					e.printStackTrace();
 				}
-				
+
 				if(netPrices.size() > 0) {
 					myAgent.addBehaviour(new PeriodicallyUpdatePriceBehaviour(myAgent, UPDATE_PRICE_INTERVAL, netPrices));
 					myAgent.addBehaviour(new PeriodicallyCheckBudgetBehaviour(myAgent, CHECK_BUDGET_INTERVAL));
@@ -197,26 +192,25 @@ public class MarketAgent extends PublishSubscribeAgent implements IMarketVisitor
 	 * Tick Behaviour to periodically update price
 	 */
 	class PeriodicallyUpdatePriceBehaviour extends TickerBehaviour {
-		
+
+		@Serial
 		private static final long serialVersionUID = 1L;
-		
-		private List<Double> netPrices;
+
+		private final List<Double> netPrices;
 		private Integer tick = 0;
-		
+
 		public PeriodicallyUpdatePriceBehaviour(Agent a, long period, List<Double> netPrices) {
 			super(a, period);
 			this.netPrices = netPrices;
 		}
-		
+
 		@Override
 		protected void onTick() {
-			if(tick >= netPrices.size()) tick = 0;
+			if (tick >= netPrices.size()) tick = 0;
 			price = netPrices.get(tick++);
 			logger.debug("Price to notify -> " + price);
 			// notify current price to subscribers.
 			MarketAgent.this.notifyToSubscribers(new NotifierCurrentPrice(new CurrentPrice(price)));
 		}
 	}
-
-	
 }

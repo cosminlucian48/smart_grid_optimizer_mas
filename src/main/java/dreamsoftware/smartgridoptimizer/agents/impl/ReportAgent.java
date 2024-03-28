@@ -56,7 +56,7 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 	// Report's format
 	private ReportFormatEnum reportFormat = ReportFormatEnum.PDF_FORMAT;
 	
-	private List<IterationStatus> iterationStatusList = new ArrayList<IterationStatus>();
+	private List<IterationStatus> iterationStatusList = new ArrayList<>();
 	
 	
 	@Override
@@ -183,6 +183,7 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 	 */
 	public class GenerateReportBehaviour extends TickerBehaviour {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 
 		public GenerateReportBehaviour(Agent a, long period) {
@@ -191,20 +192,16 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 
 		@Override
 		protected void onTick() {
-			
 			if(iterationStatusList.size() > 0) {
-				
 				// config params
-				HashMap<String, Object> parameters = new HashMap<String, Object>();
+				HashMap<String, Object> parameters = new HashMap<>();
 				parameters.put("IterationStatusList", new JRBeanCollectionDataSource(iterationStatusList));
 				parameters.put("loadFactor", PowerLoadAgent.LOAD_FACTOR);
 				parameters.put("genFactor", PowerGenerateAgent.GEN_FACTOR);
 				parameters.put("cellMaxBatLevel", BatteryAgent.CELL_MAX_BAT_LEVEL);
-				
 				try {
-					
 					// Load report
-					InputStream jasperStream = getClass().getResourceAsStream("/jasperreports/mashes_iteration_status.jasper");
+					InputStream jasperStream = getClass().getResourceAsStream("/jasperreports/smartgrid_iteration_status.jasper");
 					
 					// Fill the report with data
 					JasperReport jasperReport = (JasperReport) JRLoader.loadObject(jasperStream);
@@ -244,7 +241,7 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 					
 					
 				} catch (Exception e) {
-					logger.error("Error al generar el reporte");
+					logger.error("An error occurred while generating the report");
 					e.printStackTrace();
 				}
 				

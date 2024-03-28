@@ -1,9 +1,11 @@
 package dreamsoftware.smartgridoptimizer.gui.panel.impl;
 
 import java.awt.Color;
+import java.io.Serial;
 
 public class ConsumePowerAgentPanel extends AgentPanel {
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	private static final Integer COMPONENT_WIDTH = 100;
@@ -20,5 +22,4 @@ public class ConsumePowerAgentPanel extends AgentPanel {
 	    int b = (int) Math.min(255, Math.ceil(102 + value));
 		return new Color(r, g, b);
 	}
-
 }

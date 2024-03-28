@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.GridLayout;
+import java.io.Serial;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BoxLayout;
@@ -14,9 +15,10 @@ import dreamsoftware.smartgridoptimizer.gui.panel.ModelValuesEnum;
 
 public final class SmartGridStatusPanel extends JPanel implements ISmartGridStatusPanel {
 
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
-	private Map<ModelValuesEnum, JLabel> modelLabelValues = new HashMap<ModelValuesEnum, JLabel>();
+	private final Map<ModelValuesEnum, JLabel> modelLabelValues = new HashMap<>();
 	
 	public SmartGridStatusPanel() {
 		super();
@@ -44,5 +46,4 @@ public final class SmartGridStatusPanel extends JPanel implements ISmartGridStat
 			modelValueLabel.setText(value);
 		}
 	}
-	
 }

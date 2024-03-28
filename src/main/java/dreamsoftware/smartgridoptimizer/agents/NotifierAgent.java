@@ -1,50 +1,48 @@
 package dreamsoftware.smartgridoptimizer.agents;
 
-import java.util.HashSet;
-import java.util.Set;
-
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import jade.core.Agent;
-import jade.domain.FIPAAgentManagement.FailureException;
-import jade.domain.FIPAAgentManagement.NotUnderstoodException;
-import jade.domain.FIPAAgentManagement.RefuseException;
 import jade.lang.acl.ACLMessage;
 import jade.lang.acl.MessageTemplate;
 import jade.proto.SubscriptionResponder;
 import jade.proto.SubscriptionResponder.Subscription;
 import jade.proto.SubscriptionResponder.SubscriptionManager;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import java.io.Serial;
+import java.util.HashSet;
+import java.util.Set;
 
 public abstract class NotifierAgent extends ISmartGridAgent {
 	
+	@Serial
 	private static final long serialVersionUID = 1L;
 
-	private Logger logger = LoggerFactory.getLogger(NotifierAgent.class);
+	private final Logger logger = LoggerFactory.getLogger(NotifierAgent.class);
 
-	protected Set<Subscription> subscriptions = new HashSet<Subscription>();
+	protected Set<Subscription> subscriptions = new HashSet<>();
 	
 	@Override
 	protected void setup() {
 		super.setup();
 	    MessageTemplate template = SubscriptionResponder.createMessageTemplate(ACLMessage.SUBSCRIBE);
-	    SubscriptionManager gestor = new SubscriptionManager() {
-	    	 
-            public boolean register(Subscription suscripcion) {
-            	subscriptions.add(suscripcion);
+	    SubscriptionManager manager = new SubscriptionManager() {
+            public boolean register(Subscription subscription) {
+            	subscriptions.add(subscription);
                 return true;
             }
- 
-            public boolean deregister(Subscription suscripcion) {
-            	subscriptions.remove(suscripcion);
+            public boolean deregister(Subscription subscription) {
+            	subscriptions.remove(subscription);
                 return true;
             }
         };
-        this.addBehaviour(new ManageSubscriptions(this, template, gestor));
+        this.addBehaviour(new ManageSubscriptions(this, template, manager));
 	}
 	
 
 	private class ManageSubscriptions extends SubscriptionResponder {
 		
+		@Serial
 		private static final long serialVersionUID = 1L;
 		
 		private Subscription subscription;
@@ -54,33 +52,28 @@ public abstract class NotifierAgent extends ISmartGridAgent {
 		}
 
 		@Override
-		protected ACLMessage handleCancel(ACLMessage cancel) throws FailureException {
+		protected ACLMessage handleCancel(ACLMessage cancel) {
 
 			logger.debug("Cancel received from: " + cancel.getSender().getLocalName());
 			try {
 				this.mySubscriptionManager.deregister(this.subscription);
 			} catch (Exception e) {
-				logger.debug("Unsubscription failed ...");
+				logger.debug("deregister failed ...");
 			}
-			ACLMessage cancela = cancel.createReply();
-			cancela.setPerformative(ACLMessage.INFORM);
-			return cancela;
+			ACLMessage cancelReply = cancel.createReply();
+			cancelReply.setPerformative(ACLMessage.INFORM);
+			return cancelReply;
 		}
 
 		@Override
-		protected ACLMessage handleSubscription(ACLMessage subscriptionMessage)
-				throws NotUnderstoodException, RefuseException {
-			
+		protected ACLMessage handleSubscription(ACLMessage subscriptionMessage) {
 			logger.debug("Subscription request received from " + subscriptionMessage.getSender().getLocalName());
-			
 			this.subscription = this.createSubscription(subscriptionMessage);
-			
 			try {
 				this.mySubscriptionManager.register(subscription);
 			} catch (Exception e) {
 				logger.debug("Subscription record failed.");
 			}
-			
             ACLMessage agree = subscriptionMessage.createReply();
             agree.setPerformative(ACLMessage.AGREE);
             return agree;

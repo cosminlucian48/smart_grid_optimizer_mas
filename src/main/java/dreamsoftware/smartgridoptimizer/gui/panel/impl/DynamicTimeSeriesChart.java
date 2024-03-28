@@ -1,6 +1,7 @@
 package dreamsoftware.smartgridoptimizer.gui.panel.impl;
 
 import java.awt.Dimension;
+import java.io.Serial;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import javax.swing.JPanel;
@@ -16,19 +17,19 @@ import org.jfree.data.time.Second;
 
 public final class DynamicTimeSeriesChart extends JPanel {
 	
-	private static final long serialVersionUID = 1L;
+	@Serial
+    private static final long serialVersionUID = 1L;
 	
 	private final DynamicTimeSeriesCollection dataset;
-    private final JFreeChart chart;
-    
-	public DynamicTimeSeriesChart(final String title, final Integer valueMin, final Integer valueMax) {
+
+    public DynamicTimeSeriesChart(final String title, final Integer valueMin, final Integer valueMax) {
 		dataset = new DynamicTimeSeriesCollection(1, 1000, new Second());
 		Calendar c = Calendar.getInstance();
         dataset.setTimeBase(new Second(c.getTime()));
         dataset.addSeries(new float[1], 0, title);
-        
-        chart = ChartFactory.createTimeSeriesChart(
-            title, "Time", title, dataset, true, true, false);
+
+        JFreeChart chart = ChartFactory.createTimeSeriesChart(
+                title, "Time", title, dataset, true, true, false);
         
         final XYPlot plot = chart.getXYPlot();
         // Domain AXIS

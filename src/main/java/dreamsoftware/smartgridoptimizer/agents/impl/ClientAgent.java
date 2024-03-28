@@ -43,6 +43,10 @@ import dreamsoftware.smartgridoptimizer.ontology.predicates.PowerCurrentlyGenera
 import dreamsoftware.smartgridoptimizer.ontology.visitable.IClientVisitable;
 import dreamsoftware.smartgridoptimizer.ontology.visitor.IClientVisitor;
 
+/**
+ * The ClientAgent class represents an agent responsible for managing client-side operations in the smart grid system.
+ * It extends the GuiAgent class and implements various interfaces related to the smart grid vocabulary and visitor patterns.
+ */
 public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary, IClientVisitor {
 
 	private final Logger logger = LoggerFactory.getLogger(ClientAgent.class);
@@ -105,18 +109,13 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 		ServiceDescription serviceDescription = new ServiceDescription();
 		serviceDescription.setType(ENERGY);
 		serviceDescription.setName(serviceName);
-
 		agentDescription.addServices(serviceDescription);
-		
 		return DFService.createSubscriptionMessage(this, getDefaultDF(),agentDescription, constraint);
-    	
     }
     
 	private void subscribeToService(String serviceName) {
-
 		SearchConstraints onlyOne = new SearchConstraints();
 		onlyOne.setMaxResults(-1L);
-
 		addBehaviour(new SubscriptionInitiator(this, createDFSubscriptionFor(serviceName, onlyOne)) {
 
 			@Serial
@@ -191,7 +190,6 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		});
 		
@@ -221,7 +219,6 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		});
 		
@@ -251,7 +248,6 @@ public final class ClientAgent extends GuiAgent implements ISmartGridVocabulary,
 				} catch (FIPAException e) {
 					e.printStackTrace();
 				}
-				
 			}
 		});
 	}
