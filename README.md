@@ -1,4 +1,4 @@
-# ⚡️🌐 SmartGrid Optimizer
+# ⚡️🌐 SmartGrid Optimizer Multi-Agent System
 
 SmartGrid Optimizer is a distributed energy management system designed to optimize the operation of smart grids. It utilizes a multi-agent system framework to efficiently manage energy production, load, and storage across different locations in an electrical grid.
 
@@ -11,6 +11,7 @@ This project is based on an agent-centric development approach, implemented usin
 - **🖥️ Graphical User Interface (GUI)**: Provides a user-friendly GUI developed in Java Swing for visualizing simulation results and generated reports.
 - **🔄 Optimization Algorithms**: Implements optimization algorithms to maximize the use of renewable energy sources and minimize operational costs.
 - **🌐 Scalability and Flexibility**: Offers a flexible and scalable tool for simulating and analyzing distributed energy systems.
+- **⚙️ Dynamic Parameter Adjustment with JMX**: Integrates Java Management Extensions (JMX) with Java Mission Control to enable real-time adjustment of parameters governing the behavior of agents. This functionality allows users to fine-tune system settings on-the-fly, optimizing performance and responsiveness to changing environmental conditions or user preferences.
 
 ## 🤖 What is a Multi-Agent System?
 
@@ -127,7 +128,7 @@ The ClientAgent is responsible for monitoring and interacting with various agent
 * **Power Consumption Control:** It facilitates the control of power consumption by sending requests to load energy agents to change power consumption measures based on user input from the GUI.
 
 #### Behavioral Overview:
-* **Initialization:** The ClientAgent initializes by registering the SL codec and Mashes ontology, setting up the graphical user interface (GUI), and subscribing to relevant agent services.
+* **Initialization:** The ClientAgent initializes by registering the SL codec and SmartGrid ontology, setting up the graphical user interface (GUI), and subscribing to relevant agent services.
 * **Agent Observation:** It observes changes in the availability of different types of agents by subscribing to DF notifications for battery agents, power-generating agents, and energy-consuming agents.
 * **Periodic Status Querying:** The agent employs a ticker behavior to periodically query the status of subscribed agents and update the GUI with the latest information.
 * **GUI Event Handling:** It handles GUI events, such as requests to change power consumption measures, by sending appropriate messages to load energy agents.
@@ -135,3 +136,39 @@ The ClientAgent is responsible for monitoring and interacting with various agent
 #### Integration with DF and GUI:
 * **DF Subscription:** The ClientAgent subscribes to agent services using DF subscription initiators to receive notifications about agent availability and changes in service provision.
 * **GUI Interaction:** It interacts with the GUI by updating the displayed agent status and responding to user input for changing power consumption measures.
+
+## Application Demonstration
+
+### Graphical User Interface (GUI)
+Below are screenshots of the application's graphical user interface (GUI), which allows users to visualize simulation results and access various functionalities:
+
+<img src="doc/images/picture_1.PNG" />
+<img src="doc/images/picture_5.PNG" />
+
+### 🔄 Real-time Parameter Adjustment with JMC
+The system enables real-time parameter adjustment using Java Mission Control (JMC) and Java Management Extensions (JMX). Users can monitor and modify system parameters dynamically, optimizing the system's operation based on changing conditions and requirements.
+
+<img src="doc/images/picture_2.PNG" />
+<img src="doc/images/picture_3.PNG" />
+<img src="doc/images/picture_4.PNG" />
+
+### 🌐 Interaction with Agents using JADE
+Users can interact with the system's agents using the JADE tool, accessing agent information, sending messages, and initiating actions to control and coordinate agent behavior in the simulated environment.
+
+<img src="doc/images/picture_6.PNG" />
+
+## Contribution
+Contributions to SmartGrid Optimizer MAS are highly encouraged! If you're interested in adding new features, resolving bugs, or enhancing the project's functionality, please feel free to submit pull requests.
+
+## Credits
+SmartGrid Optimizer MAS is developed and maintained by Sergio Sánchez Sánchez (Dream Software). Special thanks to the open-source community and the contributors who have made this project possible. If you have any questions, feedback, or suggestions, feel free to reach out at dreamsoftware92@gmail.com.
+
+ ## Visitors Count
+
+<img width="auto" src="https://profile-counter.glitch.me/smart_grid_optimizer_mas/count.svg" />
+ 
+ ## Please Share & Star the repository to keep me motivated.
+  <a href = "https://github.com/sergio11/smart_grid_optimizer_mas/stargazers">
+     <img src = "https://img.shields.io/github/stars/sergio11/smart_grid_optimizer_mas" />
+  </a>
+
