@@ -11,6 +11,7 @@ This project is based on an agent-centric development approach, implemented usin
 - **🖥️ Graphical User Interface (GUI)**: Provides a user-friendly GUI developed in Java Swing for visualizing simulation results and generated reports.
 - **🔄 Optimization Algorithms**: Implements optimization algorithms to maximize the use of renewable energy sources and minimize operational costs.
 - **🌐 Scalability and Flexibility**: Offers a flexible and scalable tool for simulating and analyzing distributed energy systems.
+- **⚙️ Dynamic Parameter Adjustment with JMX**: Integrates Java Management Extensions (JMX) with Java Mission Control to enable real-time adjustment of parameters governing the behavior of agents. This functionality allows users to fine-tune system settings on-the-fly, optimizing performance and responsiveness to changing environmental conditions or user preferences.
 
 ## 🤖 What is a Multi-Agent System?
 
