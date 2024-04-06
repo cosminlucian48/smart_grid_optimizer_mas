@@ -135,3 +135,10 @@ The ClientAgent is responsible for monitoring and interacting with various agent
 #### Integration with DF and GUI:
 * **DF Subscription:** The ClientAgent subscribes to agent services using DF subscription initiators to receive notifications about agent availability and changes in service provision.
 * **GUI Interaction:** It interacts with the GUI by updating the displayed agent status and responding to user input for changing power consumption measures.
+
+<img src="doc/images/picture_1.PNG" />
+<img src="doc/images/picture_2.PNG" />
+<img src="doc/images/picture_3.PNG" />
+<img src="doc/images/picture_4.PNG" />
+<img src="doc/images/picture_5.PNG" />
+<img src="doc/images/picture_6.PNG" />
