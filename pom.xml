@@ -4,7 +4,7 @@
 	<groupId>com.dreamsoftware</groupId>
 	<artifactId>smartgridoptimizer</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
-	<name>SmartGrid Optimizer</name>
+	<name>SmartGrid Optimizer MAS</name>
 	<description>This is a model for power management with distributed load, production and storage</description>
 
 	<properties>
@@ -107,9 +107,9 @@
 	<build>
 		<plugins>
 			<plugin>
-				<groupId>com.alexnederlof</groupId>
+				<groupId>com.pro-crafting.tools</groupId>
 				<artifactId>jasperreports-plugin</artifactId>
-				<version>2.3</version>
+				<version>3.6.0</version>
 				<executions>
 					<execution>
 						<phase>process-sources</phase>

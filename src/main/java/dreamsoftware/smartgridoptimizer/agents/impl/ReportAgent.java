@@ -241,8 +241,7 @@ public class ReportAgent extends PublishSubscribeAgent implements IReportVisitor
 					
 					
 				} catch (Exception e) {
-					logger.error("An error occurred while generating the report");
-					e.printStackTrace();
+					logger.error("An error occurred while generating the report", e);
 				}
 				
 				// remove all iterations.
