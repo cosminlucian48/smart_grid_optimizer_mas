@@ -128,7 +128,7 @@ The ClientAgent is responsible for monitoring and interacting with various agent
 * **Power Consumption Control:** It facilitates the control of power consumption by sending requests to load energy agents to change power consumption measures based on user input from the GUI.
 
 #### Behavioral Overview:
-* **Initialization:** The ClientAgent initializes by registering the SL codec and Mashes ontology, setting up the graphical user interface (GUI), and subscribing to relevant agent services.
+* **Initialization:** The ClientAgent initializes by registering the SL codec and SmartGrid ontology, setting up the graphical user interface (GUI), and subscribing to relevant agent services.
 * **Agent Observation:** It observes changes in the availability of different types of agents by subscribing to DF notifications for battery agents, power-generating agents, and energy-consuming agents.
 * **Periodic Status Querying:** The agent employs a ticker behavior to periodically query the status of subscribed agents and update the GUI with the latest information.
 * **GUI Event Handling:** It handles GUI events, such as requests to change power consumption measures, by sending appropriate messages to load energy agents.
