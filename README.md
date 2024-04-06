@@ -137,9 +137,22 @@ The ClientAgent is responsible for monitoring and interacting with various agent
 * **DF Subscription:** The ClientAgent subscribes to agent services using DF subscription initiators to receive notifications about agent availability and changes in service provision.
 * **GUI Interaction:** It interacts with the GUI by updating the displayed agent status and responding to user input for changing power consumption measures.
 
+## Application Demonstration
+
+### Graphical User Interface (GUI)
+Below are screenshots of the application's graphical user interface (GUI), which allows users to visualize simulation results and access various functionalities:
+
 <img src="doc/images/picture_1.PNG" />
+<img src="doc/images/picture_5.PNG" />
+
+### 🔄 Real-time Parameter Adjustment with JMC
+The system enables real-time parameter adjustment using Java Mission Control (JMC) and Java Management Extensions (JMX). Users can monitor and modify system parameters dynamically, optimizing the system's operation based on changing conditions and requirements.
+
 <img src="doc/images/picture_2.PNG" />
 <img src="doc/images/picture_3.PNG" />
 <img src="doc/images/picture_4.PNG" />
-<img src="doc/images/picture_5.PNG" />
+
+### 🌐 Interaction with Agents using JADE
+Users can interact with the system's agents using the JADE tool, accessing agent information, sending messages, and initiating actions to control and coordinate agent behavior in the simulated environment.
+
 <img src="doc/images/picture_6.PNG" />
