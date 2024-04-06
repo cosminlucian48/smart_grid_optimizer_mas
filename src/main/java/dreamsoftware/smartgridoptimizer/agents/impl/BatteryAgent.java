@@ -39,7 +39,7 @@ public final class BatteryAgent extends PublishSubscribeAgent implements IBatter
 	public static final String AGENT_NAME = "BatteryAgent";
 	public final static String AGENT_DESCRIPTION = "Agents that store energy";
 
-	public static Double CELL_MAX_BAT_LEVEL = 321.0;
+	public static Double CELL_MAX_BAT_LEVEL = 20.0;
 	private static final Integer NOTIFY_INTERVAL = 1000;
 	
 	private Double pbat = 0.0;

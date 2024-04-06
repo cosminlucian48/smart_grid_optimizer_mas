@@ -277,24 +277,23 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 			double sp = ppower - pload;
 			logger.debug("surplus:" + sp);
 			try {
-
-				Double totalBattery = getTotalBattery();
-				Double maxBat = BatteryAgent.CELL_MAX_BAT_LEVEL * batteryLevels.size();
 				double toBuy = 0.0;
 				double pToSell = 0.0;
 				double batteryLevel = 0.0;
 				double adjustLoad = 0.0;
+				Double totalBattery = getTotalBattery();
+				Double maxBat = BatteryAgent.CELL_MAX_BAT_LEVEL * batteryLevels.size();
 				// get battery agents AID
 				List<AID> batteryAgentsAID = new ArrayList<>();
 				for (DFAgentDescription batteryAgent : batteryAgents)
 					batteryAgentsAID.add(batteryAgent.getName());
 				if (sp > 0) {
 					// if we have surplus try to store it in the battery and
-					// sell the excedent
-					double batroom = maxBat - totalBattery;
-					logger.debug("batroom -> " + batroom);
+					// sell the rest
+					double batteryRoom = maxBat - totalBattery;
+					logger.debug("batteryRoom -> " + batteryRoom);
 					ACLMessage storeInBatMessage;
-					if (sp <= batroom) {
+					if (sp <= batteryRoom) {
 						// store in bat sp
 						logger.debug("storing in bat:" + sp);
 						batteryLevel = totalBattery + sp;
@@ -302,10 +301,10 @@ public class ControllerAgent extends NotifierAgent implements IControllerVisitor
 								new StoreInBattery(new Surplus(sp / batteryLevels.size())), batteryAgentsAID);
 					} else {
 						logger.debug("store the maximum available ...");
-						batteryLevel = totalBattery + batroom;
+						batteryLevel = totalBattery + batteryRoom;
 						storeInBatMessage = createFipaRequest(
-								new StoreInBattery(new Surplus(batroom / batteryLevels.size())), batteryAgentsAID);
-						pToSell = sp - batroom;
+								new StoreInBattery(new Surplus(batteryRoom / batteryLevels.size())), batteryAgentsAID);
+						pToSell = sp - batteryRoom;
 						ACLMessage sellPowerMessage = createFipaRequest(new SellingPower(new Surplus(pToSell)),
 								new AID(MarketAgent.AGENT_NAME, AID.ISLOCALNAME));
 						myAgent.addBehaviour(new SellingPowerRequest(myAgent, sellPowerMessage));
